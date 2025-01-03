@@ -17,9 +17,11 @@ float loadFactor(const vector<int>& arr) {
 void insert(vector<int>& arr, int num) {
     int fac = arr.size(), pass = 0;
     int i = num % fac;
-    while (arr[i] != -1) {
+    int count=0;
+    while (arr[i] != -1 && count<fac) {
         i = (i + 1) % fac;
         pass++;
+        count++;
     }
     arr[i] = num;
     cout << "Number of passes: " << pass << endl;
