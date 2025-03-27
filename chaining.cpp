@@ -1,20 +1,17 @@
-#include<iostream>
-#include<vector>
+#include <iostream>
+#include <vector>
 using namespace std;
 
-// Hash function
 int hashFunction(int key, int tableSize) {
     return key % tableSize;
 }
 
-// Insert function
 void insert(vector<vector<int>>& hashTable, int num) {
     int index = hashFunction(num, hashTable.size());
     hashTable[index].push_back(num);
     cout << "Inserted " << num << " at index " << index << endl;
 }
 
-// Display the hash table
 void display(const vector<vector<int>>& hashTable) {
     for (int i = 0; i < hashTable.size(); ++i) {
         cout << "Index " << i << ": ";
@@ -29,7 +26,6 @@ void display(const vector<vector<int>>& hashTable) {
     }
 }
 
-// Find an element in the hash table
 bool find(const vector<vector<int>>& hashTable, int num) {
     int index = hashFunction(num, hashTable.size());
     for (int val : hashTable[index]) {
@@ -40,7 +36,6 @@ bool find(const vector<vector<int>>& hashTable, int num) {
     return false;
 }
 
-// Remove an element from the hash table
 void remove(vector<vector<int>>& hashTable, int num) {
     int index = hashFunction(num, hashTable.size());
     for (auto it = hashTable[index].begin(); it != hashTable[index].end(); ++it) {
@@ -53,21 +48,25 @@ void remove(vector<vector<int>>& hashTable, int num) {
     cout << "Element " << num << " not found.\n";
 }
 
-// Calculate and display the load factor of the hash table
-void loadFactor(const vector<vector<int>>& hashTable) {
+float loadFactor(const vector<vector<int>>& hashTable) {
     int totalElements = 0;
     for (int i = 0; i < hashTable.size(); ++i) {
         totalElements += hashTable[i].size();
     }
-    cout << "Load factor is: " << (float)totalElements / hashTable.size() << endl;
+    float lf = (float)totalElements / hashTable.size();
+    cout << "Load factor is: " << lf << endl;
+    return lf;
 }
 
 int main() {
     int size;
     cout << "Enter the size of the hash table: ";
     cin >> size;
+    if (cin.fail() || size <= 0) {
+        cout << "Invalid size! Exiting.\n";
+        return 1;
+    }
 
-    // Initialize the hash table with empty vectors
     vector<vector<int>> hashTable(size);
 
     int choice, num;
@@ -116,8 +115,8 @@ int main() {
                 break;
 
             case 6:
-                if ((float)hashTable.size() == 1) {
-                    cout << "Hash table is full\n";
+                if (loadFactor(hashTable) >= 10.0) {  // Arbitrary threshold
+                    cout << "Hash table is effectively full\n";
                 } else {
                     cout << "Hash table is not full\n";
                 }
@@ -130,7 +129,6 @@ int main() {
             default:
                 cout << "Invalid choice. Please try again.\n";
         }
-
     } while (choice != 7);
 
     return 0;
